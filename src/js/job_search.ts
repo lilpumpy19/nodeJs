@@ -1,5 +1,4 @@
 // Получение формы и элемента для отображения результатов
-// Получение формы и элемента для результатов
 const form = document.getElementById('jobSearchForm') as HTMLFormElement | null;
 const vacancyResults = document.getElementById('vacancyResults') as HTMLElement | null;
 
@@ -25,7 +24,7 @@ if (form && vacancyResults) {
         vacancyResults.innerHTML = '';
 
         // Отображение отфильтрованных вакансий
-        filteredVacancies.forEach((vacancy: any) => {
+        filteredVacancies.forEach((vacancy: any, index: number) => {
             const vacancyCardTemplate = document.getElementById('vacancyCardTemplate') as HTMLTemplateElement;
             const vacancyCard = vacancyCardTemplate.content.cloneNode(true) as HTMLElement;
 
@@ -36,7 +35,27 @@ if (form && vacancyResults) {
             const vacancyImage = vacancyCard.querySelector('.vacancy-image') as HTMLImageElement;
             vacancyImage.src = vacancy.img;
 
+            const deleteButton = vacancyCard.querySelector('.delete-button') as HTMLButtonElement;
+            deleteButton.addEventListener('click', () => {
+                deleteVacancy(index);
+                vacancyCard.remove();
+            });
+
             vacancyResults.appendChild(vacancyCard);
         });
     });
+}
+
+function deleteVacancy(index: number) {
+    // Получение сохраненных вакансий из LocalStorage
+    const vacancies = JSON.parse(localStorage.getItem('vacancies') || '[]');
+
+    // Удаление вакансии по индексу
+    vacancies.splice(index, 1);
+
+    // Обновление сохраненных вакансий в LocalStorage
+    localStorage.setItem('vacancies', JSON.stringify(vacancies));
+
+    // Перезагрузка страницы для отображения обновленных результатов
+    location.reload();
 }
