@@ -1,12 +1,13 @@
+console.log('e');
 
-console.log('e')
 // Получение формы и полей ввода
-const form = document.querySelector('form'),
-    jobTitleInput = document.getElementById('jobTitle') as HTMLInputElement | null,
-    locationInput = document.getElementById('location') as HTMLInputElement | null,
-    descriptionInput = document.getElementById('description') as HTMLTextAreaElement | null,
-    imgInput = document.getElementById('img') as HTMLInputElement | null,
-    salaryInput = document.getElementById('salary') as HTMLInputElement | null;
+const form = document.querySelector('form');
+const jobTitleInput = document.getElementById('jobTitle') as HTMLInputElement | null;
+const locationInput = document.getElementById('location') as HTMLInputElement | null;
+const descriptionInput = document.getElementById('description') as HTMLTextAreaElement | null;
+const imgInput = document.getElementById('img') as HTMLInputElement | null;
+const salaryInput = document.getElementById('salary') as HTMLInputElement | null;
+
 if (form && jobTitleInput && locationInput && descriptionInput && imgInput && salaryInput) {
     // Обработчик отправки формы
     form.addEventListener('submit', (event) => {
@@ -14,15 +15,17 @@ if (form && jobTitleInput && locationInput && descriptionInput && imgInput && sa
 
         // Создание объекта вакансии
         const vacancy = {
+            id: generateUniqueId(),
             jobTitle: jobTitleInput.value,
             location: locationInput.value,
             description: descriptionInput.value,
             img: imgInput.value,
             salary: salaryInput.value,
+            comments: [] // Добавлено поле для хранения комментариев
         };
 
         // Получение текущего массива вакансий из LocalStorage или создание нового пустого массива
-        const vacancies = JSON.parse(localStorage.getItem('vacancies') || '[]');
+        const vacancies: Vacancy[] = JSON.parse(localStorage.getItem('vacancies') || '[]');
 
         // Добавление новой вакансии в массив
         vacancies.push(vacancy);
@@ -33,4 +36,7 @@ if (form && jobTitleInput && locationInput && descriptionInput && imgInput && sa
         // Очистка полей ввода после добавления вакансии
         form.reset();
     });
+    function generateUniqueId(): string {
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
 }

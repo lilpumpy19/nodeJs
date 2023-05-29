@@ -1,18 +1,25 @@
 "use strict";
 console.log('e');
 // ��������� ����� � ����� �����
-const form = document.querySelector('form'), jobTitleInput = document.getElementById('jobTitle'), locationInput = document.getElementById('location'), descriptionInput = document.getElementById('description'), imgInput = document.getElementById('img'), salaryInput = document.getElementById('salary');
+const form = document.querySelector('form');
+const jobTitleInput = document.getElementById('jobTitle');
+const locationInput = document.getElementById('location');
+const descriptionInput = document.getElementById('description');
+const imgInput = document.getElementById('img');
+const salaryInput = document.getElementById('salary');
 if (form && jobTitleInput && locationInput && descriptionInput && imgInput && salaryInput) {
     // ���������� �������� �����
     form.addEventListener('submit', (event) => {
         event.preventDefault(); // �������������� �������� �����
         // �������� ������� ��������
         const vacancy = {
+            id: generateUniqueId(),
             jobTitle: jobTitleInput.value,
             location: locationInput.value,
             description: descriptionInput.value,
             img: imgInput.value,
             salary: salaryInput.value,
+            comments: [] // ��������� ���� ��� �������� ������������
         };
         // ��������� �������� ������� �������� �� LocalStorage ��� �������� ������ ������� �������
         const vacancies = JSON.parse(localStorage.getItem('vacancies') || '[]');
@@ -23,4 +30,7 @@ if (form && jobTitleInput && locationInput && descriptionInput && imgInput && sa
         // ������� ����� ����� ����� ���������� ��������
         form.reset();
     });
+    function generateUniqueId() {
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
 }

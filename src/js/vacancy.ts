@@ -21,3 +21,105 @@ if (jobTitleElement && locationElement && salaryElement && vacancyImageElement &
     vacancyImageElement.src = img || '';
     descriptionElement.textContent = description || '';
 }
+// Получение ID текущей вакансии из URL
+const urlParams = new URLSearchParams(window.location.search);
+const vacancyId = urlParams.get('id');
+
+// Получение элемента для отображения комментариев
+const commentContainer = document.getElementById('commentContainer') as HTMLElement;
+
+// Получение комментариев из Local Storage для текущей вакансии
+let comments: string[] = JSON.parse(localStorage.getItem(`comments_${vacancyId}`) || '[]');
+
+// Функция отображения комментариев
+function renderComments() {
+    if (!commentContainer) return; // Проверка на null
+
+    commentContainer.innerHTML = ''; // Очистка контейнера для комментариев
+
+    comments.forEach((comment: string) => {
+        const commentElement = document.createElement('div');
+        commentElement.textContent = comment;
+        commentContainer.appendChild(commentElement);
+    });
+}
+
+renderComments(); // Отображение комментариев при загрузке страницы
+
+// Обработчик отправки формы комментария
+const commentForm = document.getElementById('commentForm') as HTMLFormElement | null;
+if (commentForm) {
+    commentForm.addEventListener('submit', (event) => {
+        event.preventDefault(); // Предотвращение отправки формы
+
+        const commentInput = document.getElementById('commentInput') as HTMLInputElement | null;
+        if (!commentInput) return; // Проверка на null
+
+        const commentText = commentInput.value.trim();
+        if (commentText === '') return; // Проверка на пустой комментарий
+
+        // Добавление комментария в массив
+        comments.push(commentText);
+
+        // Обновление комментариев в Local Storage для текущей вакансии
+        localStorage.setItem(`comments_${vacancyId}`, JSON.stringify(comments));
+
+        // Перерисовка комментариев
+        renderComments();
+
+        // Очистка поля ввода комментария
+        commentInput.value = '';
+    });
+}
+console.log('eд');
+
+// Определение типа вакансии
+interface Vacancy {
+    id: string;
+    jobTitle: string;
+    location: string;
+    description: string;
+    img: string;
+    salary: string;
+}
+
+// Определение типа комментария
+interface Comment {
+    vacancyId: string;
+    text: string;
+}
+
+
+if (form && jobTitleInput && locationInput && descriptionInput && imgInput && salaryInput) {
+    // Обработчик отправки формы
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Предотвращение отправки формы
+
+        // Создание объекта вакансии
+        const vacancy: Vacancy = {
+            id: generateUniqueId(), // Генерация уникального идентификатора вакансии
+            jobTitle: jobTitleInput.value,
+            location: locationInput.value,
+            description: descriptionInput.value,
+            img: imgInput.value,
+            salary: salaryInput.value,
+        };
+
+        // Получение текущего объекта вакансий из LocalStorage или создание нового пустого объекта
+        const vacancies: { [id: string]: Vacancy } = JSON.parse(localStorage.getItem('vacancies') || '{}');
+
+        // Добавление новой вакансии в объект
+        vacancies[vacancy.id] = vacancy;
+
+        // Сохранение обновленного объекта вакансий в LocalStorage
+        localStorage.setItem('vacancies', JSON.stringify(vacancies));
+
+        // Очистка полей ввода после добавления вакансии
+        form.reset();
+    });
+}
+
+// Функция для генерации уникального идентификатора
+function generateUniqueId(): string {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
