@@ -81,3 +81,33 @@ footer {
 .vacancy-card form button:hover {
     background-color: #3367d6;
 }
+
+.comment-submit-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.comment-submit-button:hover {
+    background-color: #286090;
+}
+.details-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #286090;
+}
+.details-button:hover {
+    background-color: #286090;
+}

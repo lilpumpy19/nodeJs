@@ -1,6 +1,7 @@
 "use strict";
 console.log('e');
 // ��������� ����� � ����� �����
+// @ts-ignore
 const form = document.querySelector('form');
 const jobTitleInput = document.getElementById('jobTitle');
 const locationInput = document.getElementById('location');
@@ -19,11 +20,10 @@ if (form && jobTitleInput && locationInput && descriptionInput && imgInput && sa
             description: descriptionInput.value,
             img: imgInput.value,
             salary: salaryInput.value,
-            comments: [] // ��������� ���� ��� �������� ������������
+            comments: []
         };
         // ��������� �������� ������� �������� �� LocalStorage ��� �������� ������ ������� �������
         const vacancies = JSON.parse(localStorage.getItem('vacancies') || '[]');
-        // ���������� ����� �������� � ������
         vacancies.push(vacancy);
         // ���������� ������������ ������� �������� � LocalStorage
         localStorage.setItem('vacancies', JSON.stringify(vacancies));

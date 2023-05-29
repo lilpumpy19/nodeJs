@@ -1,5 +1,5 @@
 "use strict";
-// ��������� ����� � �������� ��� ����������� �����������
+// @ts-ignore
 const form = document.getElementById('jobSearchForm');
 const vacancyResults = document.getElementById('vacancyResults');
 if (form && vacancyResults) {
@@ -36,7 +36,6 @@ if (form && vacancyResults) {
     if (form) {
         form.addEventListener('submit', (event) => {
             event.preventDefault(); // �������������� �������� �����
-            // ��������� �������� ����� �����
             const jobTitle = document.getElementById('jobTitle').value;
             const location = document.getElementById('location').value;
             // ���������� �������� �� �������� � ��������������
@@ -53,7 +52,6 @@ if (form && vacancyResults) {
         vacancies.splice(index, 1);
         // ���������� ����������� �������� � LocalStorage
         localStorage.setItem('vacancies', JSON.stringify(vacancies));
-        // ����������� ��������
         renderVacancies();
     }
 }

@@ -1,6 +1,7 @@
 console.log('e');
 
 // Получение формы и полей ввода
+// @ts-ignore
 const form = document.querySelector('form');
 const jobTitleInput = document.getElementById('jobTitle') as HTMLInputElement | null;
 const locationInput = document.getElementById('location') as HTMLInputElement | null;
@@ -21,13 +22,13 @@ if (form && jobTitleInput && locationInput && descriptionInput && imgInput && sa
             description: descriptionInput.value,
             img: imgInput.value,
             salary: salaryInput.value,
-            comments: [] // Добавлено поле для хранения комментариев
+            comments: []
         };
 
         // Получение текущего массива вакансий из LocalStorage или создание нового пустого массива
         const vacancies: Vacancy[] = JSON.parse(localStorage.getItem('vacancies') || '[]');
 
-        // Добавление новой вакансии в массив
+
         vacancies.push(vacancy);
 
         // Сохранение обновленного массива вакансий в LocalStorage

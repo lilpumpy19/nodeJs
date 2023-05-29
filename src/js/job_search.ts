@@ -1,20 +1,30 @@
 // Получение формы и элемента для отображения результатов
+interface Vacancy {
+    id: string;
+    jobTitle: string;
+    location: string;
+    description: string;
+    salary: string;
+    img: string;
+}
+
+// @ts-ignore
 const form = document.getElementById('jobSearchForm') as HTMLFormElement | null;
 const vacancyResults = document.getElementById('vacancyResults') as HTMLElement | null;
 
 if (form && vacancyResults) {
     // Получение сохраненных вакансий из LocalStorage
-    let vacancies: any[] = JSON.parse(localStorage.getItem('vacancies') || '[]');
+    let vacancies: Vacancy[] = JSON.parse(localStorage.getItem('vacancies') || '[]');
 
     // Отображение всех сохраненных вакансий
-    function renderVacancies(filteredVacancies?: any[]) {
+    function renderVacancies(filteredVacancies?: Vacancy[]) {
         if (!vacancyResults) return; // Проверка на null
 
         vacancyResults.innerHTML = ''; // Очистка элемента для отображения результатов
 
         const vacanciesToDisplay = filteredVacancies || vacancies; // Используем отфильтрованные вакансии, если они переданы
 
-        vacanciesToDisplay.forEach((vacancy: any, index: number) => {
+        vacanciesToDisplay.forEach((vacancy: Vacancy, index: number) => {
             const vacancyCardTemplate = document.getElementById('vacancyCardTemplate') as HTMLTemplateElement;
             const vacancyCard = vacancyCardTemplate.content.cloneNode(true) as HTMLElement;
 
@@ -47,12 +57,12 @@ if (form && vacancyResults) {
         form.addEventListener('submit', (event) => {
             event.preventDefault(); // Предотвращение отправки формы
 
-            // Получение значения полей ввода
+
             const jobTitle = (document.getElementById('jobTitle') as HTMLInputElement).value;
             const location = (document.getElementById('location') as HTMLInputElement).value;
 
             // Фильтрация вакансий по названию и местоположению
-            const filteredVacancies = vacancies.filter((vacancy: any) => {
+            const filteredVacancies = vacancies.filter((vacancy: Vacancy) => {
                 return vacancy.jobTitle.toLowerCase().includes(jobTitle.toLowerCase()) &&
                     vacancy.location.toLowerCase().includes(location.toLowerCase());
             });
@@ -68,7 +78,7 @@ if (form && vacancyResults) {
         // Обновление сохраненных вакансий в LocalStorage
         localStorage.setItem('vacancies', JSON.stringify(vacancies));
 
-        // Перерисовка вакансий
+
         renderVacancies();
     }
 }

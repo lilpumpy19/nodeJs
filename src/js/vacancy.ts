@@ -33,7 +33,7 @@ let comments: string[] = JSON.parse(localStorage.getItem(`comments_${vacancyId}`
 
 // Функция отображения комментариев
 function renderComments() {
-    if (!commentContainer) return; // Проверка на null
+    if (!commentContainer) return;
 
     commentContainer.innerHTML = ''; // Очистка контейнера для комментариев
 
@@ -50,30 +50,30 @@ renderComments(); // Отображение комментариев при загрузке страницы
 const commentForm = document.getElementById('commentForm') as HTMLFormElement | null;
 if (commentForm) {
     commentForm.addEventListener('submit', (event) => {
-        event.preventDefault(); // Предотвращение отправки формы
+        event.preventDefault();
 
         const commentInput = document.getElementById('commentInput') as HTMLInputElement | null;
-        if (!commentInput) return; // Проверка на null
+        if (!commentInput) return;
 
         const commentText = commentInput.value.trim();
-        if (commentText === '') return; // Проверка на пустой комментарий
+        if (commentText === '') return;
 
-        // Добавление комментария в массив
+
         comments.push(commentText);
 
         // Обновление комментариев в Local Storage для текущей вакансии
         localStorage.setItem(`comments_${vacancyId}`, JSON.stringify(comments));
 
-        // Перерисовка комментариев
+
         renderComments();
 
-        // Очистка поля ввода комментария
+
         commentInput.value = '';
     });
 }
-console.log('eд');
 
-// Определение типа вакансии
+
+
 interface Vacancy {
     id: string;
     jobTitle: string;
@@ -83,7 +83,7 @@ interface Vacancy {
     salary: string;
 }
 
-// Определение типа комментария
+
 interface Comment {
     vacancyId: string;
     text: string;
@@ -91,7 +91,7 @@ interface Comment {
 
 
 if (form && jobTitleInput && locationInput && descriptionInput && imgInput && salaryInput) {
-    // Обработчик отправки формы
+
     form.addEventListener('submit', (event) => {
         event.preventDefault(); // Предотвращение отправки формы
 
@@ -114,7 +114,7 @@ if (form && jobTitleInput && locationInput && descriptionInput && imgInput && sa
         // Сохранение обновленного объекта вакансий в LocalStorage
         localStorage.setItem('vacancies', JSON.stringify(vacancies));
 
-        // Очистка полей ввода после добавления вакансии
+
         form.reset();
     });
 }
