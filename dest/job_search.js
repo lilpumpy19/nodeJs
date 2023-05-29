@@ -3,23 +3,15 @@
 const form = document.getElementById('jobSearchForm');
 const vacancyResults = document.getElementById('vacancyResults');
 if (form && vacancyResults) {
-    // ���������� �������� �����
-    form.addEventListener('submit', (event) => {
-        event.preventDefault(); // �������������� �������� �����
-        // ��������� �������� ����� �����
-        const jobTitle = document.getElementById('jobTitle').value;
-        const location = document.getElementById('location').value;
-        // ��������� ����������� �������� �� LocalStorage
-        const vacancies = JSON.parse(localStorage.getItem('vacancies') || '[]');
-        // ���������� �������� �� �������� � ��������������
-        const filteredVacancies = vacancies.filter((vacancy) => {
-            return vacancy.jobTitle.toLowerCase().includes(jobTitle.toLowerCase()) &&
-                vacancy.location.toLowerCase().includes(location.toLowerCase());
-        });
-        // ������� �������� ��� ����������� �����������
-        vacancyResults.innerHTML = '';
-        // ����������� ��������������� ��������
-        filteredVacancies.forEach((vacancy, index) => {
+    // ��������� ����������� �������� �� LocalStorage
+    let vacancies = JSON.parse(localStorage.getItem('vacancies') || '[]');
+    // ����������� ���� ����������� ��������
+    function renderVacancies(filteredVacancies) {
+        if (!vacancyResults)
+            return; // �������� �� null
+        vacancyResults.innerHTML = ''; // ������� �������� ��� ����������� �����������
+        const vacanciesToDisplay = filteredVacancies || vacancies; // ���������� ��������������� ��������, ���� ��� ��������
+        vacanciesToDisplay.forEach((vacancy, index) => {
             const vacancyCardTemplate = document.getElementById('vacancyCardTemplate');
             const vacancyCard = vacancyCardTemplate.content.cloneNode(true);
             vacancyCard.querySelector('.vacancy-title').textContent = vacancy.jobTitle;
@@ -30,19 +22,33 @@ if (form && vacancyResults) {
             const deleteButton = vacancyCard.querySelector('.delete-button');
             deleteButton.addEventListener('click', () => {
                 deleteVacancy(index);
-                vacancyCard.remove();
             });
             vacancyResults.appendChild(vacancyCard);
         });
-    });
-}
-function deleteVacancy(index) {
-    // ��������� ����������� �������� �� LocalStorage
-    const vacancies = JSON.parse(localStorage.getItem('vacancies') || '[]');
-    // �������� �������� �� �������
-    vacancies.splice(index, 1);
-    // ���������� ����������� �������� � LocalStorage
-    localStorage.setItem('vacancies', JSON.stringify(vacancies));
-    // ������������ �������� ��� ����������� ����������� �����������
-    location.reload();
+    }
+    renderVacancies(); // ����������� ���� �������� ��� �������� ��������
+    // ���������� �������� �����
+    if (form) { // �������� �� null
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // �������������� �������� �����
+            // ��������� �������� ����� �����
+            const jobTitle = document.getElementById('jobTitle').value;
+            const location = document.getElementById('location').value;
+            // ���������� �������� �� �������� � ��������������
+            const filteredVacancies = vacancies.filter((vacancy) => {
+                return vacancy.jobTitle.toLowerCase().includes(jobTitle.toLowerCase()) &&
+                    vacancy.location.toLowerCase().includes(location.toLowerCase());
+            });
+            // ����������� ��������������� ��������
+            renderVacancies(filteredVacancies);
+        });
+    }
+    function deleteVacancy(index) {
+        // �������� �������� �� �������
+        vacancies.splice(index, 1);
+        // ���������� ����������� �������� � LocalStorage
+        localStorage.setItem('vacancies', JSON.stringify(vacancies));
+        // ����������� ��������
+        renderVacancies();
+    }
 }

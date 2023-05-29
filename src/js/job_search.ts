@@ -3,28 +3,18 @@ const form = document.getElementById('jobSearchForm') as HTMLFormElement | null;
 const vacancyResults = document.getElementById('vacancyResults') as HTMLElement | null;
 
 if (form && vacancyResults) {
-    // Обработчик отправки формы
-    form.addEventListener('submit', (event) => {
-        event.preventDefault(); // Предотвращение отправки формы
+    // Получение сохраненных вакансий из LocalStorage
+    let vacancies: any[] = JSON.parse(localStorage.getItem('vacancies') || '[]');
 
-        // Получение значения полей ввода
-        const jobTitle = (document.getElementById('jobTitle') as HTMLInputElement).value;
-        const location = (document.getElementById('location') as HTMLInputElement).value;
+    // Отображение всех сохраненных вакансий
+    function renderVacancies(filteredVacancies?: any[]) {
+        if (!vacancyResults) return; // Проверка на null
 
-        // Получение сохраненных вакансий из LocalStorage
-        const vacancies = JSON.parse(localStorage.getItem('vacancies') || '[]');
+        vacancyResults.innerHTML = ''; // Очистка элемента для отображения результатов
 
-        // Фильтрация вакансий по названию и местоположению
-        const filteredVacancies = vacancies.filter((vacancy: any) => {
-            return vacancy.jobTitle.toLowerCase().includes(jobTitle.toLowerCase()) &&
-                vacancy.location.toLowerCase().includes(location.toLowerCase());
-        });
+        const vacanciesToDisplay = filteredVacancies || vacancies; // Используем отфильтрованные вакансии, если они переданы
 
-        // Очистка элемента для отображения результатов
-        vacancyResults.innerHTML = '';
-
-        // Отображение отфильтрованных вакансий
-        filteredVacancies.forEach((vacancy: any, index: number) => {
+        vacanciesToDisplay.forEach((vacancy: any, index: number) => {
             const vacancyCardTemplate = document.getElementById('vacancyCardTemplate') as HTMLTemplateElement;
             const vacancyCard = vacancyCardTemplate.content.cloneNode(true) as HTMLElement;
 
@@ -38,24 +28,42 @@ if (form && vacancyResults) {
             const deleteButton = vacancyCard.querySelector('.delete-button') as HTMLButtonElement;
             deleteButton.addEventListener('click', () => {
                 deleteVacancy(index);
-                vacancyCard.remove();
             });
 
             vacancyResults.appendChild(vacancyCard);
         });
-    });
-}
+    }
 
-function deleteVacancy(index: number) {
-    // Получение сохраненных вакансий из LocalStorage
-    const vacancies = JSON.parse(localStorage.getItem('vacancies') || '[]');
+    renderVacancies(); // Отображение всех вакансий при загрузке страницы
 
-    // Удаление вакансии по индексу
-    vacancies.splice(index, 1);
+    // Обработчик отправки формы
+    if (form) { // Проверка на null
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Предотвращение отправки формы
 
-    // Обновление сохраненных вакансий в LocalStorage
-    localStorage.setItem('vacancies', JSON.stringify(vacancies));
+            // Получение значения полей ввода
+            const jobTitle = (document.getElementById('jobTitle') as HTMLInputElement).value;
+            const location = (document.getElementById('location') as HTMLInputElement).value;
 
-    // Перезагрузка страницы для отображения обновленных результатов
-    location.reload();
+            // Фильтрация вакансий по названию и местоположению
+            const filteredVacancies = vacancies.filter((vacancy: any) => {
+                return vacancy.jobTitle.toLowerCase().includes(jobTitle.toLowerCase()) &&
+                    vacancy.location.toLowerCase().includes(location.toLowerCase());
+            });
+
+            // Отображение отфильтрованных вакансий
+            renderVacancies(filteredVacancies);
+        });
+    }
+
+    function deleteVacancy(index: number) {
+        // Удаление вакансии из массива
+        vacancies.splice(index, 1);
+
+        // Обновление сохраненных вакансий в LocalStorage
+        localStorage.setItem('vacancies', JSON.stringify(vacancies));
+
+        // Перерисовка вакансий
+        renderVacancies();
+    }
 }
