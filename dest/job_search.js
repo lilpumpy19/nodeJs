@@ -19,6 +19,11 @@ if (form && vacancyResults) {
             vacancyCard.querySelector('.vacancy-location').textContent = `Location: ${vacancy.location}`;
             const vacancyImage = vacancyCard.querySelector('.vacancy-image');
             vacancyImage.src = vacancy.img;
+            const detailsButton = vacancyCard.querySelector('.details-button');
+            detailsButton.addEventListener('click', () => {
+                // ������� �� �������� "vacancy.html" � ��������� ������ �������� ����� ��������� URL
+                window.location.href = `vacancy.html?id=${vacancy.id}&jobTitle=${vacancy.jobTitle}&location=${vacancy.location}&description=${vacancy.description}&salary=${vacancy.salary}&img=${vacancy.img}`;
+            });
             const deleteButton = vacancyCard.querySelector('.delete-button');
             deleteButton.addEventListener('click', () => {
                 deleteVacancy(index);
@@ -28,7 +33,7 @@ if (form && vacancyResults) {
     }
     renderVacancies(); // ����������� ���� �������� ��� �������� ��������
     // ���������� �������� �����
-    if (form) { // �������� �� null
+    if (form) {
         form.addEventListener('submit', (event) => {
             event.preventDefault(); // �������������� �������� �����
             // ��������� �������� ����� �����

@@ -25,10 +25,16 @@ if (form && vacancyResults) {
             const vacancyImage = vacancyCard.querySelector('.vacancy-image') as HTMLImageElement;
             vacancyImage.src = vacancy.img;
 
+            const detailsButton = vacancyCard.querySelector('.details-button') as HTMLButtonElement;
+            detailsButton.addEventListener('click', () => {
+                // Переход на страницу "vacancy.html" с передачей данных вакансии через параметры URL
+                window.location.href = `vacancy.html?id=${vacancy.id}&jobTitle=${vacancy.jobTitle}&location=${vacancy.location}&description=${vacancy.description}&salary=${vacancy.salary}&img=${vacancy.img}`;
+            });
+
             const deleteButton = vacancyCard.querySelector('.delete-button') as HTMLButtonElement;
             deleteButton.addEventListener('click', () => {
                 deleteVacancy(index);
-            });
+            })
 
             vacancyResults.appendChild(vacancyCard);
         });
@@ -37,7 +43,7 @@ if (form && vacancyResults) {
     renderVacancies(); // Отображение всех вакансий при загрузке страницы
 
     // Обработчик отправки формы
-    if (form) { // Проверка на null
+    if (form) {
         form.addEventListener('submit', (event) => {
             event.preventDefault(); // Предотвращение отправки формы
 
@@ -55,7 +61,6 @@ if (form && vacancyResults) {
             renderVacancies(filteredVacancies);
         });
     }
-
     function deleteVacancy(index: number) {
         // Удаление вакансии из массива
         vacancies.splice(index, 1);
