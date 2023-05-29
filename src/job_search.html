@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск работы</title>
+    <link rel="stylesheet" href="style_job_search.css"> <!-- Подключение файла стилей -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+    <style>
+        .vacancy-card img {
+            max-width: 100%;
+            max-height: 200px; /* Задайте желаемую максимальную высоту */
+            object-fit: cover;
+        }
+        .vacancy-card {
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+            margin-left: 20px;
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+
+        #vacancyResults {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: left;
+
+        }
+
+
+        @media (max-width: 768px) {
+            .vacancy-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a id="home-link" href="#">Главная</a></li>
+            <li><a href="job_search.html" id="job_search">Поиск работы</a></li>
+            <li><a href="employers.html" id ="employers">Работодатели</a></li>
+            <li><a href="#" id ="about-link">О нас</a></li>
+            <li><a href="#" id = "login-link">Войти</a></li>
+            <li><a href="#" id="register-link">Зарегистрироваться</a></li>
+            <li><a href="#" id="my_account">Мой аккаунт</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="job-search-section">
+    <h1>Поиск работы</h1>
+    <form id="jobSearchForm" >
+        <label for="jobTitle">Название вакансии:</label>
+        <input type="text" id="jobTitle" name="jobTitle">
+
+        <label for="location">Местоположение:</label>
+        <input type="text" id="location" name="location">
+
+        <button type="submit">Найти вакансии</button>
+    </form>
+
+
+
+
+</section>
+
+<div id="vacancyResults" class="vacancy-results"></div>
+
+
+<<!-- Шаблон для каждой вакансии -->
+<template id="vacancyCardTemplate">
+    <div class="vacancy-card">
+        <h3 class="vacancy-title"></h3>
+        <p class="vacancy-salary"></p>
+        <p class="vacancy-location"></p>
+        <img class="vacancy-image" src="" alt="Vacancy Image">
+    </div>
+</template>
+
+
+
+
+
+
+<footer>
+    <p>&copy; 2023 Job Search. Все права защищены.</p>
+</footer>
+<script src="../dest/job_search.js" type="module"></script>
+</body>
+</html>
